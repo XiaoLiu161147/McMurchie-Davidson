@@ -71,7 +71,7 @@ class PsiFour(object):
         nso = self.mol.nbasis * 2
         nocc = self.mol.nocc * 2
         nvirt = nso - nocc
-        SCF_E = self.mol.energy
+        SCF_E = self.mol.energy.real
         
         # Make slices
         o = slice(0, nocc)
@@ -79,7 +79,7 @@ class PsiFour(object):
         
         #Extend eigenvalues
  
-        eps = np.repeat(self.mol.MO,2) 
+        eps = np.real(np.repeat(self.mol.MO,2)) 
         Eocc = eps[o]
         Evirt = eps[v]
         
@@ -198,12 +198,14 @@ class PsiFour(object):
         
         ### Build so Fock matirx
 
-        MO = self.mol.double_bar
+        MO = np.real(self.mol.double_bar)
         
         # Update H, transform to MO basis and tile for alpha/beta spin
         H = np.einsum('uj,vi,uv', self.mol.C, self.mol.C, self.mol.Core)
         H = np.repeat(H, 2, axis=0)
         H = np.repeat(H, 2, axis=1)
+
+        H = np.real(H)
         
         # Make H block diagonal
         spin_ind = np.arange(H.shape[0], dtype=np.int) % 2
@@ -239,13 +241,22 @@ class PsiFour(object):
         CCSDcorr_E_old = 0.0
         for CCSD_iter in range(1, maxiter + 1):
             ### Build intermediates: [Stanton:1991:4334] Eqns. 3-8
+            #print('Dia: ',np.linalg.norm(Dia))
+            #print('Dijab: ',np.linalg.norm(Dijab))
+
             Fae = build_Fae(t1, t2)
+            #print('Fae: ',np.linalg.norm(Fae))
             Fmi = build_Fmi(t1, t2)
+            #print('Fmi: ',np.linalg.norm(Fmi))
             Fme = build_Fme(t1, t2)
+            #print('Fme: ',np.linalg.norm(Fme))
         
             Wmnij = build_Wmnij(t1, t2)
             Wabef = build_Wabef(t1, t2)
             Wmbej = build_Wmbej(t1, t2)
+            #print('Wmnij: ',np.linalg.norm(Wmnij))
+            #print('Wabef: ',np.linalg.norm(Wabef))
+            #print('Wmbej: ',np.linalg.norm(Wmbej))
         
             #### Build RHS side of t1 equations, [Stanton:1991:4334] Eqn. 1
             rhs_T1  = F[o, v].copy()
@@ -294,10 +305,15 @@ class PsiFour(object):
             Pab = np.einsum('ma,mbij->ijab', t1, MO[o, v, o, o])
             rhs_T2 -= Pab
             rhs_T2 += Pab.swapaxes(2, 3)
+
+            #print('rhsT1: ',np.linalg.norm(rhs_T1))
+            #print('rhsT2: ',np.linalg.norm(rhs_T2))
         
             ### Update t1 and t2 amplitudes
             t1 = rhs_T1 / Dia
             t2 = rhs_T2 / Dijab
+            #print('T1: ',np.linalg.norm(t1))
+            #print('T2: ',np.linalg.norm(t2))
         
             ### Compute CCSD correlation energy
             CCSDcorr_E = np.einsum('ia,ia->', F[o, v], t1)
