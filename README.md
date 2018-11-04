@@ -1,4 +1,8 @@
-[![Build Status](https://travis-ci.org/jjgoings/McMurchie-Davidson.svg?branch=master)](https://travis-ci.org/jjgoings/McMurchie-Davidson)
+[![Build Status](https://travis-ci.org/jjgoings/McMurchie-Davidson.svg?branch=master)](https://travis-ci.org/jjgoings/McMurchie-Davidson) 
+[![codecov](https://codecov.io/gh/jjgoings/McMurchie-Davidson/branch/master/graph/badge.svg)](https://codecov.io/gh/jjgoings/McMurchie-Davidson)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/jjgoings/McMurchie-Davidson.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jjgoings/McMurchie-Davidson/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/jjgoings/McMurchie-Davidson.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jjgoings/McMurchie-Davidson/context:python)
+
 # McMurchie-Davidson
 
 This contains some simple routines to compute one and two electron integrals 
@@ -44,14 +48,15 @@ python sample-input.py
 which should do an SCF on water with an STO-3G basis and dump out to your terminal:
 
 ```
-E(SCF)    =  -74.942079928029 in 10 iterations
+E(SCF)    =  -74.942079928060 in 10 iterations
   Convergence:
-    FPS-SPF  =  2.76108367031e-12
-    RMS(P)   =  1.79e-11
-    dE(SCF)  =  -9.34e-10
+    FPS-SPF  =  3.377372360032819e-13
+    RMS(P)   =  2.35e-12
+    dE(SCF)  =  -9.95e-10
   Dipole X =  0.00000000
   Dipole Y =  1.53400931
   Dipole Z =  -0.00000000
+E(MP2) =  -74.99122956422062
 ```
 
 ## Input file specification

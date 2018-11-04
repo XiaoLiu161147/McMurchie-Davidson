@@ -10,11 +10,11 @@ from mmd.integrals.twoe import ERI
 @cython.cdivision(True)
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def formPT(np.ndarray[complex, ndim=2] P, np.ndarray[complex, ndim=2] P_old, list bfs, int nbasis, dict screen, double tol):
+def formPT(np.ndarray[complex, ndim=2] P, np.ndarray[complex, ndim=2] P_old, list bfs, long nbasis, dict screen, double tol):
     """Routine to build the AO basis Fock matrix"""
     cdef:
-        int N = nbasis
-        int i,j,k,l,ij,il
+        long N = nbasis
+        long i,j,k,l,ij,il
         double s12_deg, s34_deg, s12_34_deg, s1234_deg
         double eri, bound, dmax
         #complex [:,:] G

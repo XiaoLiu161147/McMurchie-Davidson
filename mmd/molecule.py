@@ -42,6 +42,16 @@ class Molecule(SCF,Forces):
         self.basis_data = self.getBasis(basis_file)
         self.formBasis()
 
+    @property
+    def _forces(self):
+        # FIXME: assumes forces have been computed!
+        F = []
+        for atom in range(len(self.atoms)):
+            F.append(self.atoms[atom].forces)
+        return np.concatenate(F).reshape(-1,3)
+
+         
+
     def formBasis(self):
         """Routine to create the basis from the input molecular geometry and
            basis set. On exit, you should have a basis in self.bfs, which is a 
@@ -75,7 +85,7 @@ class Molecule(SCF,Forces):
                         sum([atom.charge*atom.origin[2] for atom in self.atoms])])\
                         * (1./sum([atom.charge for atom in self.atoms]))
 
-    def build(self,direct):
+    def build(self,direct=False):
         """Routine to build necessary integrals"""
         self.one_electron_integrals()
         if direct:
@@ -209,9 +219,9 @@ class Molecule(SCF,Forces):
                 sym = self.sym2num(str(line.split()[0]))
                 mass = masses[sym]
                 # Convert Angstrom to Bohr (au)
-                x   = float(line.split()[1])*1.889725989
-                y   = float(line.split()[2])*1.889725989
-                z   = float(line.split()[3])*1.889725989
+                x   = float(line.split()[1])/0.52917721092
+                y   = float(line.split()[2])/0.52917721092
+                z   = float(line.split()[3])/0.52917721092
                 atom = Atom(charge=sym,mass=mass,
                             origin=np.asarray([x,y,z]))
                 atomlist.append(atom)
