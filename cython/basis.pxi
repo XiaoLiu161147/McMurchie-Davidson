@@ -84,7 +84,7 @@ cdef class Basis:
         if self.norm != NULL:
             free(self.norm)
 
-    def normalize(self):
+    cpdef normalize(self):
         """Routine to normalize the BasisFunction objects.
            Returns self.norm, which is a list of doubles that
            normalizes the contracted Gaussian basis functions (CGBFs)
