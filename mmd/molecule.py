@@ -33,6 +33,7 @@ class Molecule(SCF,Forces):
         self.nelec = sum([atom.charge for atom in atomlist]) - charge 
         self.nocc  = self.nelec//2
         self.is_built = False
+        self.spin_orbital = False
         
         # Read in basis set data
         import os
